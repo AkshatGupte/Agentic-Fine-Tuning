@@ -14,7 +14,7 @@ Items marked **[FILL IN]** are decisions the user still has to make. The agent m
 | Dev model (alt) | `Qwen/Qwen2.5-Coder-3B-Instruct` | Use if 1.5B is too weak. |
 | Main model | `Qwen/Qwen2.5-Coder-7B-Instruct` | Step 5 only. Must be under 10B parameters. |
 
-**[FILL IN]** Final dev model choice: `____` (1.5B or 3B)
+**Final dev model choice:** `Qwen/Qwen2.5-Coder-1.5B-Instruct` (1.5B)
 
 Check that the model ids still exist on Hugging Face before using them.
 
@@ -22,7 +22,7 @@ Check that the model ids still exist on Hugging Face before using them.
 
 ## 2. Dataset: Spider
 
-- Source: Spider (Yale). **[FILL IN]** Confirm the license and how the data will be stored on Kaggle (private Kaggle dataset).
+- Source: Spider (Yale), licensed under CC BY-SA 4.0. License use for this project is confirmed. On Kaggle, the data will be stored as a private Kaggle dataset.
 - Files used: `train_spider.json`, `dev.json`, and the `database/` folder of SQLite files.
 - Each example has: `db_id`, `question`, `query` (the correct SQL).
 - The database schema is **read directly from the SQLite file** (not from `tables.json`), so the same code can work on any SQLite database later.

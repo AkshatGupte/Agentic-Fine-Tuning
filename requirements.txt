@@ -1,0 +1,9 @@
+# Versions will be pinned after the first successful Kaggle run.
+transformers
+peft
+trl
+bitsandbytes
+datasets
+accelerate
+pyyaml
+pytest

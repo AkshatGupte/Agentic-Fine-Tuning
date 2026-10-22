@@ -1,0 +1,22 @@
+# Stage A shared settings. DATA_ROOT may be overridden with the DATA_ROOT
+# environment variable or the --data-root argument in data/prepare_spider.py.
+seed: 42
+
+paths:
+  data_root: data/raw/spider
+  kaggle_data_root: /kaggle/input/datasets/akshatgupte/spider-data-2
+  database_dir: database
+  train_file: train_spider.json
+  dev_file: dev.json
+  splits_dir: data/splits
+  results_dir: results
+
+# The final development model (1.5B or 3B) is intentionally not selected yet;
+# docs/PROTOCOL.md requires the user to make that frozen decision.
+model_name: Qwen/Qwen2.5-Coder-1.5B-Instruct
+splits:
+  train_sft_size: 3000
+  dev_eval_size: 300
+
+sql:
+  timeout_seconds: 10

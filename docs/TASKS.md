@@ -15,17 +15,17 @@ Mark tasks with `[x]` when done.
 
 **Goal:** a clean repo and a notebook that can load Spider.
 
-- [ ] **1.1** Create the folders from `AGENTS.md` (section 5) and a `.gitignore` that excludes: data files, model weights, `__pycache__`, `.env`, `results/predictions/` large files if needed.
-- [ ] **1.2** Create `requirements.txt` with the libraries listed in `AGENTS.md` (pin versions later, after the first successful Kaggle run).
-- [ ] **1.3** Create `configs/base.yaml` with: seed, paths (with a `DATA_ROOT` setting that can point to local folder or `/kaggle/input/...`), model name, split sizes, SQL timeout.
-- [ ] **1.4** Write `data/prepare_spider.py`:
+- [x] **1.1** Create the folders from `AGENTS.md` (section 5) and a `.gitignore` that excludes: data files, model weights, `__pycache__`, `.env`, `results/predictions/` large files if needed.
+- [x] **1.2** Create `requirements.txt` with the libraries listed in `AGENTS.md` (pin versions later, after the first successful Kaggle run).
+- [x] **1.3** Create `configs/base.yaml` with: seed, paths (with a `DATA_ROOT` setting that can point to local folder or `/kaggle/input/...`), model name, split sizes, SQL timeout.
+- [x] **1.4** Write `data/prepare_spider.py`:
   - reads `train_spider.json` and `dev.json` from `DATA_ROOT`,
   - samples `train_sft` (3000) and `dev_eval` (300) with seed 42,
   - saves them to `data/splits/train_sft.json` and `data/splits/dev_eval.json`,
   - prints counts and one example.
-- [ ] **1.5** Write `harness/schema.py` with a function `get_schema(db_path) -> str` that returns the `CREATE TABLE` statements from `sqlite_master`.
-- [ ] **1.6** Write `docs/LOG.md` first entry: date, "Step 1 started", settings chosen.
-- [ ] **1.7** Add a smoke test: a script `scripts/smoke_load.py` that loads the splits, builds the schema for one example, and prints the example.
+- [x] **1.5** Write `harness/schema.py` with a function `get_schema(db_path) -> str` that returns the `CREATE TABLE` statements from `sqlite_master`.
+- [x] **1.6** Write `docs/LOG.md` first entry: date, "Step 1 started", settings chosen.
+- [x] **1.7** Add a smoke test: a script `scripts/smoke_load.py` that loads the splits, builds the schema for one example, and prints the example.
 
 **Ask the user:** where the Spider files are (local path), and confirm the license is OK for this use.
 
