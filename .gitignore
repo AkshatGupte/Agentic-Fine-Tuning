@@ -1,0 +1,50 @@
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# ---------- Virtual environments ----------
+.venv/
+venv/
+env/
+
+# ---------- Secrets (never commit) ----------
+.env
+*.env
+kaggle.json
+hf_token*
+*.pem
+
+# ---------- Raw datasets (large, and not ours to redistribute) ----------
+data/raw/
+
+# ---------- Model files, adapters, checkpoints (large) ----------
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.gguf
+*.ckpt
+checkpoints/
+adapters/
+outputs/
+runs/
+wandb/
+lightning_logs/
+
+# ---------- Training caches ----------
+.cache/
+unsloth_compiled_cache/
+
+# ---------- OS / editor files ----------
+.DS_Store
+Thumbs.db
+.idea/
+
+# ---------- NOT ignored on purpose ----------
+# data/splits/*.json      (small; keeps train/dev samples identical everywhere)
+# results/*.json          (run scores)
+# results/predictions/    (small per-example prediction files)
+# docs/, configs/, harness/, train/
