@@ -41,6 +41,13 @@ Keep entries short. Newest entry at the bottom.
 - Effect on results (if known): no model or scoring results yet.
 - Files changed / result files: `docs/PROTOCOL.md`, `docs/LOG.md`.
 
+### 2026-10-22 | Step 1 | Kaggle setup check passed
+- What happened: the user ran split preparation and the schema smoke test successfully on Kaggle with the attached private Spider dataset.
+- Decision / change: none.
+- Why: validate the Stage A data path and scripts before building the scorer.
+- Effect on results (if known): `train_sft` has 3000 examples and `dev_eval` has 300 examples; no model or scoring results yet.
+- Files changed / result files: no result file; Kaggle setup-check notebook run completed.
+
 ---
 
 ## Open questions
