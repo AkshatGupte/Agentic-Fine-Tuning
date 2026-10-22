@@ -39,17 +39,17 @@ Mark tasks with `[x]` when done.
 
 **Goal:** a trusted EX scorer. Build and test it **before** any model is used.
 
-- [ ] **2.1** `harness/executor.py`
+- [x] **2.1** `harness/executor.py`
   - `run_sql(db_path, sql, timeout_s) -> Result` where `Result` has: `ok`, `rows`, `error_type`, `error_message`.
   - Open SQLite read-only (`uri=True`, `mode=ro`).
   - Enforce the time limit (for example with a progress handler or a separate process).
   - Allow only one `SELECT`/`WITH` statement.
   - Map errors to the types in `PROTOCOL.md`.
-- [ ] **2.2** `harness/scorer.py`
+- [x] **2.2** `harness/scorer.py`
   - `compare_results(gold_rows, pred_rows, ordered: bool) -> bool` using the rules in `PROTOCOL.md` (unordered multiset unless gold has `ORDER BY`; round floats; `1 == 1.0`).
   - `score_example(db_path, gold_sql, pred_sql) -> dict` with: `correct`, `valid`, `error_type`, `gold_failed`.
   - `score_dataset(examples, predictions) -> summary` with: EX, valid rate, error counts, number correct / total, number of `gold_failed`.
-- [ ] **2.3** Unit tests in `harness/test_scorer.py` (pytest). Include tests for:
+- [x] **2.3** Unit tests in `harness/test_scorer.py` (pytest). Include tests for:
   - gold used as prediction gives correct,
   - same rows in a different order is correct when no `ORDER BY`,
   - different order is **wrong** when gold has `ORDER BY`,
@@ -58,8 +58,8 @@ Mark tasks with `[x]` when done.
   - a long-running query hits the timeout,
   - a non-SELECT statement (for example `DROP TABLE`) is rejected and never run,
   - float rounding (`0.1+0.2` style cases).
-- [ ] **2.4** `harness/check_gold.py`: runs the **gold SQL as the prediction** for all of `dev_eval` and prints the summary.
-- [ ] **2.5** Update `docs/LOG.md` with any problem found (for example, gold queries that fail).
+- [x] **2.4** `harness/check_gold.py`: runs the **gold SQL as the prediction** for all of `dev_eval` and prints the summary.
+- [x] **2.5** Update `docs/LOG.md` with any problem found (for example, gold queries that fail). No gold-query problems were found.
 
 **Done when:** `harness/check_gold.py` reports **100% EX** on `dev_eval` (300 examples), apart from any `gold_failed` cases, which are listed and explained. All unit tests pass.
 
@@ -71,21 +71,21 @@ Mark tasks with `[x]` when done.
 
 **Goal:** EX numbers for the base model with no training, using two prompts.
 
-- [ ] **3.1** `harness/prompts.py`
+- [x] **3.1** `harness/prompts.py`
   - `build_prompt_a(schema, question)` and `build_prompt_b(schema, question)` exactly as in `PROTOCOL.md`.
   - The 3 fixed examples for Prompt B use a made-up schema (not Spider).
   - `clean_sql_output(text)` as in `PROTOCOL.md`.
-- [ ] **3.2** `harness/generate.py`
+- [x] **3.2** `harness/generate.py`
   - Loads a model (Hugging Face, with optional 4-bit loading) and generates SQL for a list of prompts.
   - Greedy decoding, `max_new_tokens=256`.
   - Batches prompts to save time. Handles left padding correctly.
   - Has a `--smoke` option: tiny model or 5 examples, runs on CPU.
-- [ ] **3.3** `harness/run_baseline.py`
+- [x] **3.3** `harness/run_baseline.py`
   - Arguments: config file, `--prompt A|B`, `--model`, `--limit N`.
   - For each example in `dev_eval`: build prompt, generate, clean, score.
   - Writes the result JSON to `results/` and predictions to `results/predictions/` (formats in `PROTOCOL.md`).
-- [ ] **3.4** `harness/compare.py`: reads result JSON files and prints a small table (run name, EX with `correct/total`, valid rate).
-- [ ] **3.5** Tell the user exactly which Kaggle commands to run for: Prompt A and Prompt B on the dev model.
+- [x] **3.4** `harness/compare.py`: reads result JSON files and prints a small table (run name, EX with `correct/total`, valid rate).
+- [x] **3.5** Tell the user exactly which Kaggle commands to run for: Prompt A and Prompt B on the dev model.
 - [ ] **3.6** After the user returns the results, help read the error types and **freeze one prompt** (record the choice and reason in `PROTOCOL.md` section 4 and `docs/LOG.md`). Do **not** tune the prompt by reading `dev_eval` errors one by one.
 
 **Done when:** a results table exists with Prompt A and Prompt B (EX, valid rate, error counts) on `dev_eval`, and one prompt is frozen.

@@ -11,8 +11,7 @@ paths:
   splits_dir: data/splits
   results_dir: results
 
-# The final development model (1.5B or 3B) is intentionally not selected yet;
-# docs/PROTOCOL.md requires the user to make that frozen decision.
+# Frozen development-model choice from docs/PROTOCOL.md.
 model_name: Qwen/Qwen2.5-Coder-1.5B-Instruct
 splits:
   train_sft_size: 3000

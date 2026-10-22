@@ -48,6 +48,13 @@ Keep entries short. Newest entry at the bottom.
 - Effect on results (if known): `train_sft` has 3000 examples and `dev_eval` has 300 examples; no model or scoring results yet.
 - Files changed / result files: no result file; Kaggle setup-check notebook run completed.
 
+### 2026-10-22 | Step 2 | Local gold-query validation passed
+- What happened: ran the complete `dev_eval` gold-query check locally after the executor and scorer unit tests passed.
+- Decision / change: none; no gold-query failures or metric issues were found.
+- Why: validate the execution-accuracy scorer before any model evaluation.
+- Effect on results (if known): EX 100.0% (300/300), valid SQL 100.0%, gold failed 0.
+- Files changed / result files: `results/2026-10-22_step2_check_gold.json`, `results/predictions/step2_check_gold.jsonl`.
+
 ---
 
 ## Open questions
