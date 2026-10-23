@@ -116,7 +116,7 @@ Mark tasks with `[x]` when done.
   - Writes the same result JSON format (with `adapter` filled in).
 - [x] **4.5** Update `harness/compare.py` so one table shows: Prompt A, Prompt B, and the adapter.
 - [x] **4.6** Tell the user the exact Kaggle steps: where to put the data, how to start training, how to save the adapter as a Kaggle dataset before the session ends, how to resume.
-- [ ] **4.7** After results come back, help check: training loss curve, EX versus baseline, error types that changed. Log any manual decision in `docs/LOG.md`.
+- [x] **4.7** After results come back, help check: training loss curve, EX versus baseline, error types that changed. Log any manual decision in `docs/LOG.md`.
 
 **Done when:** a table compares the prompt-only results with the fine-tuned adapter on `dev_eval`, and every setting for the run is written down in a result file and `adapter_info.json`.
 

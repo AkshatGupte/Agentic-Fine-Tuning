@@ -62,6 +62,13 @@ Keep entries short. Newest entry at the bottom.
 - Effect on results (if known): Prompt B is the baseline to compare with the adapter in Step 4. Prompt A errors: 249 `other`, 6 `no_such_column`, 7 `wrong_result`; Prompt B errors: 23 `other`, 42 `no_such_column`, 2 `no_such_table`, 55 `wrong_result`.
 - Files changed / result files: `results/2026-10-22_step3_promptA_qwen2.5-coder-1.5b.json`, `results/2026-10-22_step3_promptB_qwen2.5-coder-1.5b.json`, and their 300-row prediction JSONL files.
 
+### 2026-10-23 | Step 4 | First Prompt-B QLoRA adapter run
+- What happened: trained a QLoRA adapter for two epochs on Kaggle, then evaluated it on the frozen 300-example `dev_eval` split.
+- Decision / change: used the frozen Prompt B and starting QLoRA settings (rank 16, alpha 32, dropout 0.05, 4-bit NF4, fp16, learning rate 2e-4, effective batch size 16, seed 42). The SFT builder kept 2963 of 3000 examples and dropped 37 above the 2048-token limit.
+- Why: Prompt B was frozen after Step 3; over-length examples cannot fit the frozen maximum sequence length.
+- Effect on results (if known): adapter EX 59.7% (179/300), valid SQL 85.0%; Prompt-B base EX 59.3% (178/300), valid SQL 77.7%. The EX difference is one example and should not be over-claimed. Adapter errors: 7 `no_such_table`, 38 `no_such_column`, 76 `wrong_result`, 0 `other`.
+- Files changed / result files: `results/2026-10-23_step4_adapter_qwen2.5-coder-1.5b.json`, `results/predictions/step4_adapter_qwen2.5-coder-1.5b.jsonl`; adapter saved as a private Kaggle dataset with `adapter_info.json` (commit `c2274e4`). Evaluation emitted a PEFT compatibility warning that `kasa_config` was ignored by PEFT 0.20.0; the core LoRA adapter loaded and evaluated successfully.
+
 ---
 
 ## Open questions

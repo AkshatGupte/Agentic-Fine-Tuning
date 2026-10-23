@@ -1,0 +1,31 @@
+{
+  "run_name": "step4_adapter_qwen2.5-coder-1.5b",
+  "date": "2026-10-23",
+  "step": 4,
+  "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+  "adapter": "/kaggle/input/datasets/akshatgupte/adapter-promptb/outputs/qwen1.5b_prompt_b_adapter",
+  "prompt": "B",
+  "split": "dev_eval",
+  "n_examples": 300,
+  "n_gold_failed": 0,
+  "n_correct": 179,
+  "n_scored": 300,
+  "ex": 0.5966666666666667,
+  "valid_sql_rate": 0.85,
+  "error_counts": {
+    "syntax_error": 0,
+    "no_such_table": 7,
+    "no_such_column": 38,
+    "timeout": 0,
+    "wrong_result": 76,
+    "empty_prediction": 0,
+    "other": 0
+  },
+  "settings": {
+    "seed": 42,
+    "max_new_tokens": 256,
+    "greedy": true
+  },
+  "git_commit": "c2274e4",
+  "notes": ""
+}
