@@ -98,24 +98,24 @@ Mark tasks with `[x]` when done.
 
 **Goal:** train one adapter and compare it with the prompt-only results.
 
-- [ ] **4.1** `train/make_sft_data.py`
+- [x] **4.1** `train/make_sft_data.py`
   - Reads `train_sft.json`, builds `{prompt, completion}` pairs using the **frozen prompt** and the schema from SQLite.
   - Saves a JSONL file.
   - Prints token length statistics. Reports how many examples are longer than the max length (default 2048) and drops them, with the count logged.
-- [ ] **4.2** `configs/train_qlora.yaml` with the starting values from `PROTOCOL.md` section 6.
-- [ ] **4.3** `train/train_qlora.py`
+- [x] **4.2** `configs/train_qlora.yaml` with the starting values from `PROTOCOL.md` section 6.
+- [x] **4.3** `train/train_qlora.py`
   - 4-bit NF4 base model, LoRA on all linear layers, fp16.
   - Loss on completion tokens only.
   - Saves checkpoints every N steps to a configurable output folder (so it can point to `/kaggle/working`).
   - Can **resume** from the latest checkpoint.
   - Logs training loss to a file.
   - Has `--smoke` mode (tiny model, 20 examples, 2 steps) that runs on CPU.
-- [ ] **4.3b** Write the adapter's training settings into a small `adapter_info.json` next to the adapter (model, data file, settings, seed, git commit).
-- [ ] **4.4** `train/eval_adapter.py`
+- [x] **4.3b** Write the adapter's training settings into a small `adapter_info.json` next to the adapter (model, data file, settings, seed, git commit).
+- [x] **4.4** `train/eval_adapter.py`
   - Loads the base model plus the adapter, runs the same flow as `run_baseline.py` on `dev_eval` with the frozen prompt.
   - Writes the same result JSON format (with `adapter` filled in).
-- [ ] **4.5** Update `harness/compare.py` so one table shows: Prompt A, Prompt B, and the adapter.
-- [ ] **4.6** Tell the user the exact Kaggle steps: where to put the data, how to start training, how to save the adapter as a Kaggle dataset before the session ends, how to resume.
+- [x] **4.5** Update `harness/compare.py` so one table shows: Prompt A, Prompt B, and the adapter.
+- [x] **4.6** Tell the user the exact Kaggle steps: where to put the data, how to start training, how to save the adapter as a Kaggle dataset before the session ends, how to resume.
 - [ ] **4.7** After results come back, help check: training loss curve, EX versus baseline, error types that changed. Log any manual decision in `docs/LOG.md`.
 
 **Done when:** a table compares the prompt-only results with the fine-tuned adapter on `dev_eval`, and every setting for the run is written down in a result file and `adapter_info.json`.
