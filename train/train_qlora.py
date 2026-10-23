@@ -4,7 +4,7 @@ Run on Kaggle:
     python train/train_qlora.py --config configs/train_qlora.yaml
 """
 from __future__ import annotations
-import argparse, json, random, subprocess
+import argparse, inspect, json, math, random, subprocess
 from pathlib import Path
 import yaml
 
@@ -48,7 +48,13 @@ def main() -> None:
         maximum=max(len(r["input_ids"]) for r in rows)
         return {key:torch.tensor([r[key]+(([tokenizer.pad_token_id] if key=="input_ids" else [0] if key=="attention_mask" else [-100])*(maximum-len(r[key]))) for r in rows]) for key in ("input_ids","attention_mask","labels")}
     output = Path(cfg["output_dir"] + ("_smoke" if args.smoke else "")); output.mkdir(parents=True, exist_ok=True)
-    train_args = TrainingArguments(output_dir=str(output), num_train_epochs=cfg["num_train_epochs"], per_device_train_batch_size=cfg["per_device_train_batch_size"], gradient_accumulation_steps=cfg["gradient_accumulation_steps"], learning_rate=cfg["learning_rate"], lr_scheduler_type="cosine", warmup_ratio=cfg["warmup_ratio"], fp16=cfg["fp16"], save_steps=cfg["save_steps"], logging_steps=cfg["logging_steps"], save_total_limit=2, report_to="none", max_steps=2 if args.smoke else -1)
+    train_kwargs = {"output_dir":str(output), "num_train_epochs":cfg["num_train_epochs"], "per_device_train_batch_size":cfg["per_device_train_batch_size"], "gradient_accumulation_steps":cfg["gradient_accumulation_steps"], "learning_rate":cfg["learning_rate"], "lr_scheduler_type":"cosine", "fp16":cfg["fp16"], "save_steps":cfg["save_steps"], "logging_steps":cfg["logging_steps"], "save_total_limit":2, "report_to":"none", "max_steps":2 if args.smoke else -1}
+    if "warmup_ratio" in inspect.signature(TrainingArguments).parameters:
+        train_kwargs["warmup_ratio"] = cfg["warmup_ratio"]
+    else:
+        total_steps = math.ceil(len(dataset) / (cfg["per_device_train_batch_size"] * cfg["gradient_accumulation_steps"])) * cfg["num_train_epochs"]
+        train_kwargs["warmup_steps"] = max(1, round(total_steps * cfg["warmup_ratio"]))
+    train_args = TrainingArguments(**train_kwargs)
     trainer=Trainer(model=model,args=train_args,train_dataset=dataset,data_collator=collate)
     resume = None if args.resume in (None, "latest") else args.resume
     if args.resume == "latest":
