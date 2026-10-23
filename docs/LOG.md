@@ -55,13 +55,20 @@ Keep entries short. Newest entry at the bottom.
 - Effect on results (if known): EX 100.0% (300/300), valid SQL 100.0%, gold failed 0.
 - Files changed / result files: `results/2026-10-22_step2_check_gold.json`, `results/predictions/step2_check_gold.jsonl`.
 
+### 2026-10-22 | Step 3 | Prompt B frozen after Kaggle baseline comparison
+- What happened: user ran both full 300-example prompt-only baselines on Kaggle using `Qwen/Qwen2.5-Coder-1.5B-Instruct`.
+- Decision / change: froze Prompt B for all subsequent training and evaluation.
+- Why: Prompt B achieved EX 59.3% (178/300) and valid SQL 77.7%, versus Prompt A at EX 12.7% (38/300) and valid SQL 15.0%. The choice uses aggregate scores only, not individual dev-set error inspection.
+- Effect on results (if known): Prompt B is the baseline to compare with the adapter in Step 4. Prompt A errors: 249 `other`, 6 `no_such_column`, 7 `wrong_result`; Prompt B errors: 23 `other`, 42 `no_such_column`, 2 `no_such_table`, 55 `wrong_result`.
+- Files changed / result files: `results/2026-10-22_step3_promptA_qwen2.5-coder-1.5b.json`, `results/2026-10-22_step3_promptB_qwen2.5-coder-1.5b.json`, and their 300-row prediction JSONL files.
+
 ---
 
 ## Open questions
 
 - [x] Confirm the Spider license is OK for this use (CC BY-SA 4.0).
 - [x] Final dev model: `Qwen/Qwen2.5-Coder-1.5B-Instruct` (1.5B).
-- [ ] Frozen prompt: A or B? (decide at the end of Step 3)
+- [x] Frozen prompt: B (chosen from the full Step 3 aggregate results).
 
 ---
 
@@ -71,4 +78,5 @@ Fill this in as runs finish. Use `correct/total` next to the percentage.
 
 | Date | Run name | Model | Prompt | Adapter | EX | Valid SQL | Notes |
 |---|---|---|---|---|---|---|---|
-| | | | | | | | |
+| 2026-10-22 | step3_promptA_qwen2.5-coder-1.5b | Qwen/Qwen2.5-Coder-1.5B-Instruct | A | — | 12.7% (38/300) | 15.0% | Kaggle run; copy result artifacts locally |
+| 2026-10-22 | step3_promptB_qwen2.5-coder-1.5b | Qwen/Qwen2.5-Coder-1.5B-Instruct | B | — | 59.3% (178/300) | 77.7% | Kaggle run; frozen prompt |

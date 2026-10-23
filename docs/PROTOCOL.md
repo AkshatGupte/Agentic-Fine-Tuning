@@ -103,7 +103,7 @@ Models may wrap SQL in markdown fences or add text. The cleaning function must:
 - keep the first statement only,
 - strip whitespace.
 
-**[FILL IN]** Chosen frozen prompt after Step 3: `____` (A or B). Record why in `docs/LOG.md`.
+**Chosen frozen prompt after Step 3:** `B`. Prompt B is used for all subsequent training and evaluation. It was selected from the two full `dev_eval` baseline runs; see `docs/LOG.md` for the aggregate comparison.
 
 ---
 

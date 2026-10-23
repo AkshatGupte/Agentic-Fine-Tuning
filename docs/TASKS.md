@@ -86,7 +86,7 @@ Mark tasks with `[x]` when done.
   - Writes the result JSON to `results/` and predictions to `results/predictions/` (formats in `PROTOCOL.md`).
 - [x] **3.4** `harness/compare.py`: reads result JSON files and prints a small table (run name, EX with `correct/total`, valid rate).
 - [x] **3.5** Tell the user exactly which Kaggle commands to run for: Prompt A and Prompt B on the dev model.
-- [ ] **3.6** After the user returns the results, help read the error types and **freeze one prompt** (record the choice and reason in `PROTOCOL.md` section 4 and `docs/LOG.md`). Do **not** tune the prompt by reading `dev_eval` errors one by one.
+- [x] **3.6** After the user returns the results, help read the error types and **freeze one prompt** (record the choice and reason in `PROTOCOL.md` section 4 and `docs/LOG.md`). Do **not** tune the prompt by reading `dev_eval` errors one by one.
 
 **Done when:** a results table exists with Prompt A and Prompt B (EX, valid rate, error counts) on `dev_eval`, and one prompt is frozen.
 
