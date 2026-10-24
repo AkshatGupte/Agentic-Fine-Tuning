@@ -84,6 +84,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--batch-size", type=int, default=1)
     parser.add_argument("--load-in-4bit", action="store_true")
     parser.add_argument("--smoke", action="store_true", help="Generate and score only five examples.")
+    parser.add_argument("--step", type=int, default=3, help="Stage step recorded in output names.")
     return parser
 
 
@@ -126,14 +127,14 @@ def main() -> None:
     )
 
     short_model = model_name.rsplit("/", maxsplit=1)[-1].lower().replace("-instruct", "")
-    run_name = f"step3_prompt{args.prompt}_{short_model}"
+    run_name = f"step{args.step}_prompt{args.prompt}_{short_model}"
     if args.smoke:
         run_name += "_smoke"
     today = date.today().isoformat()
     result = {
         "run_name": run_name,
         "date": today,
-        "step": 3,
+        "step": args.step,
         "model": model_name,
         "adapter": None,
         "prompt": args.prompt,

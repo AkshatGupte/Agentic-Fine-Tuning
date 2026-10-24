@@ -35,6 +35,9 @@ def main() -> None:
     if cfg["load_in_4bit"]:
         kwargs.update({"device_map":"auto", "quantization_config":BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=torch.float16)})
     model = AutoModelForCausalLM.from_pretrained(cfg["model_name"], **kwargs)
+    if cfg.get("gradient_checkpointing", False):
+        model.config.use_cache = False
+        model.gradient_checkpointing_enable()
     if cfg["load_in_4bit"]: model = prepare_model_for_kbit_training(model)
     model = get_peft_model(model, LoraConfig(r=cfg["lora_r"], lora_alpha=cfg["lora_alpha"], lora_dropout=cfg["lora_dropout"], target_modules="all-linear", task_type=TaskType.CAUSAL_LM))
     dataset = load_dataset("json", data_files=str(cfg["data_file"]), split="train")
@@ -48,7 +51,7 @@ def main() -> None:
         maximum=max(len(r["input_ids"]) for r in rows)
         return {key:torch.tensor([r[key]+(([tokenizer.pad_token_id] if key=="input_ids" else [0] if key=="attention_mask" else [-100])*(maximum-len(r[key]))) for r in rows]) for key in ("input_ids","attention_mask","labels")}
     output = Path(cfg["output_dir"] + ("_smoke" if args.smoke else "")); output.mkdir(parents=True, exist_ok=True)
-    train_kwargs = {"output_dir":str(output), "num_train_epochs":cfg["num_train_epochs"], "per_device_train_batch_size":cfg["per_device_train_batch_size"], "gradient_accumulation_steps":cfg["gradient_accumulation_steps"], "learning_rate":cfg["learning_rate"], "lr_scheduler_type":"cosine", "fp16":cfg["fp16"], "save_steps":cfg["save_steps"], "logging_steps":cfg["logging_steps"], "save_total_limit":2, "report_to":"none", "max_steps":2 if args.smoke else -1}
+    train_kwargs = {"output_dir":str(output), "num_train_epochs":cfg["num_train_epochs"], "per_device_train_batch_size":cfg["per_device_train_batch_size"], "gradient_accumulation_steps":cfg["gradient_accumulation_steps"], "learning_rate":cfg["learning_rate"], "lr_scheduler_type":"cosine", "fp16":cfg["fp16"], "save_steps":cfg["save_steps"], "logging_steps":cfg["logging_steps"], "save_total_limit":2, "report_to":"none", "max_steps":2 if args.smoke else -1, "gradient_checkpointing":cfg.get("gradient_checkpointing", False), "optim":cfg.get("optim", "adamw_torch")}
     if "warmup_ratio" in inspect.signature(TrainingArguments).parameters:
         train_kwargs["warmup_ratio"] = cfg["warmup_ratio"]
     else:

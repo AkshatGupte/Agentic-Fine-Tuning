@@ -128,9 +128,9 @@ Mark tasks with `[x]` when done.
 
 **Goal:** see if a 7B QLoRA run fits on a 16 GB Kaggle GPU. Time-box this step.
 
-- [ ] **5.1** `configs/train_qlora_7b.yaml`: same as the dev config but with a 7B model, shorter max length (try 1024 to 1536), batch size 1, higher gradient accumulation, gradient checkpointing on.
-- [ ] **5.2** Add optional memory-saving features to `train/train_qlora.py` behind config flags (gradient checkpointing, paged 8-bit optimizer). Only add Unsloth if the standard setup runs out of memory, and ask the user first.
-- [ ] **5.3** Tell the user to first run the **7B prompt-only baseline** on Kaggle (Prompt frozen), then try the training run.
+- [x] **5.1** `configs/train_qlora_7b.yaml`: same as the dev config but with a 7B model, shorter max length (try 1024 to 1536), batch size 1, higher gradient accumulation, gradient checkpointing on.
+- [x] **5.2** Add optional memory-saving features to `train/train_qlora.py` behind config flags (gradient checkpointing, paged 8-bit optimizer). Only add Unsloth if the standard setup runs out of memory, and ask the user first.
+- [x] **5.3** Tell the user to first run the **7B prompt-only baseline** on Kaggle (Prompt frozen), then try the training run.
 - [ ] **5.4** If it runs out of memory, try the steps in order: shorter length, gradient checkpointing, smaller LoRA rank, then Unsloth. Log each attempt in `docs/LOG.md`.
 - [ ] **5.5** **Time limit:** if it does not fit after a few tries, stop. Write the decision in `docs/LOG.md`: keep the small model for development and plan the 7B for final runs with other hardware or a trimmed setup.
 
