@@ -69,6 +69,13 @@ Keep entries short. Newest entry at the bottom.
 - Effect on results (if known): adapter EX 59.7% (179/300), valid SQL 85.0%; Prompt-B base EX 59.3% (178/300), valid SQL 77.7%. The EX difference is one example and should not be over-claimed. Adapter errors: 7 `no_such_table`, 38 `no_such_column`, 76 `wrong_result`, 0 `other`.
 - Files changed / result files: `results/2026-10-23_step4_adapter_qwen2.5-coder-1.5b.json`, `results/predictions/step4_adapter_qwen2.5-coder-1.5b.jsonl`; adapter saved as a private Kaggle dataset with `adapter_info.json` (commit `c2274e4`). Evaluation emitted a PEFT compatibility warning that `kasa_config` was ignored by PEFT 0.20.0; the core LoRA adapter loaded and evaluated successfully.
 
+### 2026-10-24 | Step 5 | 7B Prompt-B QLoRA run completed
+- What happened: ran the frozen Prompt-B baseline and a two-epoch 7B QLoRA adapter run on Kaggle, then evaluated the adapter on the fixed 300-example `dev_eval` split.
+- Decision / change: used `Qwen/Qwen2.5-Coder-7B-Instruct`, max sequence length 1024, batch size 1, gradient accumulation 16, gradient checkpointing, and paged 8-bit AdamW. The SFT builder retained 2527 training examples at the shorter length.
+- Why: these memory-saving settings allowed the 7B model to fit on the Kaggle GPU without an out-of-memory fallback.
+- Effect on results (if known): Prompt-B baseline EX 72.6% (217/299), valid SQL 95.3%; one gold query timed out and was excluded during this Kaggle run. The verified adapter result was EX 72.7% (218/300), valid SQL 94.0%, with 0 `no_such_table`, 16 `no_such_column`, 64 `wrong_result`, and 2 `other` errors. The baseline and adapter denominators differ, so the small EX difference is not a conclusive training gain.
+- Files changed / result files: `results/2026-10-24_step5_promptB_qwen2.5-coder-7b.json`, `results/predictions/step5_promptB_qwen2.5-coder-7b.jsonl`, `results/2026-10-24_step5_adapter_qwen2.5-coder-7b.json`, `results/predictions/step5_adapter_qwen2.5-coder-7b.jsonl`; both adapters are preserved together in the private Kaggle dataset `stage-a-sql-adapters`, containing only the required adapter model, configuration, and project metadata files.
+
 ---
 
 ## Open questions
@@ -87,3 +94,6 @@ Fill this in as runs finish. Use `correct/total` next to the percentage.
 |---|---|---|---|---|---|---|---|
 | 2026-10-22 | step3_promptA_qwen2.5-coder-1.5b | Qwen/Qwen2.5-Coder-1.5B-Instruct | A | — | 12.7% (38/300) | 15.0% | Kaggle run; copy result artifacts locally |
 | 2026-10-22 | step3_promptB_qwen2.5-coder-1.5b | Qwen/Qwen2.5-Coder-1.5B-Instruct | B | — | 59.3% (178/300) | 77.7% | Kaggle run; frozen prompt |
+| 2026-10-23 | step4_adapter_qwen2.5-coder-1.5b | Qwen/Qwen2.5-Coder-1.5B-Instruct | B | QLoRA adapter | 59.7% (179/300) | 85.0% | 2963 training examples retained at 2048 tokens |
+| 2026-10-24 | step5_promptB_qwen2.5-coder-7b | Qwen/Qwen2.5-Coder-7B-Instruct | B | — | 72.6% (217/299) | 95.3% | One gold query timed out and was excluded |
+| 2026-10-24 | step5_adapter_qwen2.5-coder-7b | Qwen/Qwen2.5-Coder-7B-Instruct | B | QLoRA adapter | 72.7% (218/300) | 94.0% | 2527 training examples retained at 1024 tokens; 7B fit on Kaggle |

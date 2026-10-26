@@ -1,0 +1,31 @@
+{
+  "run_name": "step5_adapter_qwen2.5-coder-7b",
+  "date": "2026-10-24",
+  "step": 5,
+  "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+  "adapter": "/kaggle/working/outputs/qwen7b_prompt_b_adapter",
+  "prompt": "B",
+  "split": "dev_eval",
+  "n_examples": 300,
+  "n_gold_failed": 0,
+  "n_correct": 218,
+  "n_scored": 300,
+  "ex": 0.7266666666666667,
+  "valid_sql_rate": 0.94,
+  "error_counts": {
+    "syntax_error": 0,
+    "no_such_table": 0,
+    "no_such_column": 16,
+    "timeout": 0,
+    "wrong_result": 64,
+    "empty_prediction": 0,
+    "other": 2
+  },
+  "settings": {
+    "seed": 42,
+    "max_new_tokens": 256,
+    "greedy": true
+  },
+  "git_commit": "cb9e94a",
+  "notes": ""
+}

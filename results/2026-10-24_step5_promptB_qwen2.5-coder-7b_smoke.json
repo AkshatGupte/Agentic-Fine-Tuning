@@ -1,0 +1,33 @@
+{
+  "run_name": "step5_promptB_qwen2.5-coder-7b_smoke",
+  "date": "2026-10-24",
+  "step": 5,
+  "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+  "adapter": null,
+  "prompt": "B",
+  "split": "dev_eval",
+  "n_examples": 5,
+  "n_gold_failed": 0,
+  "n_correct": 4,
+  "n_scored": 5,
+  "ex": 0.8,
+  "valid_sql_rate": 1.0,
+  "error_counts": {
+    "syntax_error": 0,
+    "no_such_table": 0,
+    "no_such_column": 0,
+    "timeout": 0,
+    "wrong_result": 1,
+    "empty_prediction": 0,
+    "other": 0
+  },
+  "settings": {
+    "seed": 42,
+    "max_new_tokens": 256,
+    "greedy": true,
+    "batch_size": 1,
+    "load_in_4bit": true
+  },
+  "git_commit": "cb9e94a",
+  "notes": "Smoke run"
+}
