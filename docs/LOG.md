@@ -97,6 +97,13 @@ Keep entries short. Newest entry at the bottom.
 - Effect on results (if known): no Stage B model baseline result yet. The runner and all Stage A/Stage B unit tests pass (18 tests).
 - Files changed / result files: `harness/ehrsql_prompts.py`, `harness/run_ehrsql_baseline.py`, `harness/compare_ehrsql.py`, `harness/test_ehrsql_prompts.py`, `configs/ehrsql.yaml`; no new model result file.
 
+### 2026-10-28 | Stage B1 | Support flat Kaggle EHRSQL upload layout
+- What happened: the first Kaggle smoke run found `mimic_iii.sqlite` at the attached dataset root rather than under `mimic_iii/`.
+- Decision / change: the EHRSQL loader now accepts both the official nested layout and a flat Kaggle layout for the SQLite database and official split JSON files.
+- Why: Kaggle dataset uploads may flatten the selected files while retaining the same official EHRSQL contents; accepting both paths avoids a storage-layout-only failure.
+- Effect on results (if known): no model result changed. All 19 unit tests and the local oracle smoke test passed after the change.
+- Files changed / result files: `data/ehrsql.py`, `harness/test_ehrsql.py`, `configs/ehrsql.yaml`, `docs/LOG.md`, `results/2026-10-28_stageb1_ehrsql_mimic_iii_smoke.json`.
+
 ---
 
 ## Open questions

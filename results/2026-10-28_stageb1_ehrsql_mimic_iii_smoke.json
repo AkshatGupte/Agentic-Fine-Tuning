@@ -38,6 +38,6 @@
     "answerable_limit": 3,
     "oracle_predictions": true
   },
-  "git_commit": "d821a83",
+  "git_commit": "4c32ae6",
   "notes": "Smoke test used gold SQL for answerable examples and ABSTAIN for impossible examples."
 }

@@ -49,6 +49,18 @@ def test_loader_validates_split_labels_and_database() -> None:
             load_ehrsql_split(root, "valid")
 
 
+def test_loader_supports_flat_kaggle_upload_layout() -> None:
+    """The loader accepts a Kaggle dataset that stores database and splits at root."""
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        with sqlite3.connect(root / "mimic_iii.sqlite"):
+            pass
+        (root / "valid.json").write_text(json.dumps([_record("valid")]), encoding="utf-8")
+        examples = load_ehrsql_split(root, "valid")
+        assert len(examples) == 1
+        assert examples[0]["db_id"] == "mimic_iii"
+
+
 def test_ehrsql_scores_execution_and_correct_abstention() -> None:
     """Gold SQL and exact ABSTAIN score correctly in their separate metric groups."""
     with tempfile.TemporaryDirectory() as directory:

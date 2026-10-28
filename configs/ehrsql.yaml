@@ -1,5 +1,6 @@
 # Frozen Stage B EHRSQL MIMIC-III settings. Override paths with command-line
-# arguments or DATA_ROOT; do not change the official split files.
+# arguments or DATA_ROOT; flat Kaggle uploads and the official nested layout
+# are both supported. Do not change the official split files.
 seed: 42
 
 paths:

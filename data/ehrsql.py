@@ -16,11 +16,29 @@ MIMIC_III_DB_ID = "mimic_iii"
 
 
 def database_path(data_root: Path) -> Path:
-    """Return the required MIMIC-III SQLite database path and validate it."""
-    path = data_root / MIMIC_III_DB_ID / f"{MIMIC_III_DB_ID}.sqlite"
-    if not path.is_file():
-        raise FileNotFoundError(f"EHRSQL MIMIC-III SQLite database not found: {path}")
-    return path
+    """Return the MIMIC-III database from official nested or flat Kaggle layout."""
+    candidates = (
+        data_root / MIMIC_III_DB_ID / f"{MIMIC_III_DB_ID}.sqlite",
+        data_root / f"{MIMIC_III_DB_ID}.sqlite",
+    )
+    for path in candidates:
+        if path.is_file():
+            return path
+    attempted = ", ".join(str(path) for path in candidates)
+    raise FileNotFoundError(f"EHRSQL MIMIC-III SQLite database not found. Tried: {attempted}")
+
+
+def _split_path(data_root: Path, split: EHRSQL_SPLIT) -> Path:
+    """Find one split file from official nested or flat Kaggle layout."""
+    candidates = (
+        data_root / MIMIC_III_DB_ID / f"{split}.json",
+        data_root / f"{split}.json",
+    )
+    for path in candidates:
+        if path.is_file():
+            return path
+    attempted = ", ".join(str(path) for path in candidates)
+    raise FileNotFoundError(f"EHRSQL split file not found. Tried: {attempted}")
 
 
 def _validate_example(example: Any, split: EHRSQL_SPLIT, index: int) -> dict[str, Any]:
@@ -51,9 +69,7 @@ def _validate_example(example: Any, split: EHRSQL_SPLIT, index: int) -> dict[str
 def load_ehrsql_split(data_root: Path, split: EHRSQL_SPLIT) -> list[dict[str, Any]]:
     """Load one official EHRSQL MIMIC-III split and validate its records."""
     database_path(data_root)
-    split_path = data_root / MIMIC_III_DB_ID / f"{split}.json"
-    if not split_path.is_file():
-        raise FileNotFoundError(f"EHRSQL split file not found: {split_path}")
+    split_path = _split_path(data_root, split)
     with split_path.open(encoding="utf-8") as file:
         records = json.load(file)
     if not isinstance(records, list) or not records:
