@@ -1,0 +1,43 @@
+{
+  "run_name": "stageb1_ehrsql_mimic_iii_smoke",
+  "date": "2026-10-28",
+  "stage": "B",
+  "step": "B1",
+  "dataset": "EHRSQL v1.5.0 MIMIC-III",
+  "model": null,
+  "adapter": null,
+  "prompt": null,
+  "split": "valid",
+  "n_examples": 4,
+  "n_answerable": 3,
+  "n_impossible": 1,
+  "n_gold_failed": 0,
+  "n_scored": 3,
+  "n_correct": 3,
+  "n_valid": 3,
+  "answerable_ex": 1.0,
+  "valid_sql_rate": 1.0,
+  "n_correct_abstentions": 1,
+  "impossible_abstention_accuracy": 1.0,
+  "n_unsafe_answers": 0,
+  "n_unnecessary_abstentions": 0,
+  "error_counts": {
+    "syntax_error": 0,
+    "no_such_table": 0,
+    "no_such_column": 0,
+    "timeout": 0,
+    "wrong_result": 0,
+    "empty_prediction": 0,
+    "other": 0,
+    "unsafe_answer": 0,
+    "unnecessary_abstention": 0
+  },
+  "settings": {
+    "seed": 42,
+    "timeout_s": 10.0,
+    "answerable_limit": 3,
+    "oracle_predictions": true
+  },
+  "git_commit": "d821a83",
+  "notes": "Smoke test used gold SQL for answerable examples and ABSTAIN for impossible examples."
+}

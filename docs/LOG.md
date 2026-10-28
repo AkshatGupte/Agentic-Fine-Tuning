@@ -76,6 +76,27 @@ Keep entries short. Newest entry at the bottom.
 - Effect on results (if known): Prompt-B baseline EX 72.6% (217/299), valid SQL 95.3%; one gold query timed out and was excluded during this Kaggle run. The verified adapter result was EX 72.7% (218/300), valid SQL 94.0%, with 0 `no_such_table`, 16 `no_such_column`, 64 `wrong_result`, and 2 `other` errors. The baseline and adapter denominators differ, so the small EX difference is not a conclusive training gain.
 - Files changed / result files: `results/2026-10-24_step5_promptB_qwen2.5-coder-7b.json`, `results/predictions/step5_promptB_qwen2.5-coder-7b.jsonl`, `results/2026-10-24_step5_adapter_qwen2.5-coder-7b.json`, `results/predictions/step5_adapter_qwen2.5-coder-7b.jsonl`; both adapters are preserved together in the private Kaggle dataset `stage-a-sql-adapters`, containing only the required adapter model, configuration, and project metadata files.
 
+### 2026-10-28 | Stage B | EHRSQL MIMIC-III selected and verified
+- What happened: user selected EHRSQL v1.5.0's MIMIC-III subset for Stage B, downloaded the provided preprocessed SQLite database, and verified read-only SQLite access locally and in a private Kaggle dataset.
+- Decision / change: preserve EHRSQL's official train/valid/test files without resampling; use MIMIC-III only for the initial Stage B work. Treat `is_impossible` questions as a separate abstention task using the exact output token `ABSTAIN`.
+- Why: the dataset is a realistic healthcare-domain text-to-SQL benchmark that fits the existing SQLite execution harness. Official splits prevent train/development/test leakage, and separate abstention metrics prevent unsafe SQL output on unsupported questions from being hidden by execution accuracy.
+- Effect on results (if known): no Stage B baseline or training result yet. Split counts are train 9,318 answerable; validation 760 answerable and 362 impossible; test 1,198 answerable and 588 impossible.
+- Files changed / result files: `docs/STAGE_B_PROTOCOL.md`, `docs/STAGE_B_TASKS.md`, `docs/LOG.md`; no result file.
+
+### 2026-10-28 | Stage B1 | EHRSQL loader, abstention scorer, and smoke test
+- What happened: added a validated EHRSQL MIMIC-III split loader, separate Stage B scorer, exact `ABSTAIN` output handling, unit tests, and a CPU smoke script. The smoke test used gold SQL for three answerable validation records and `ABSTAIN` for one impossible validation record.
+- Decision / change: kept Stage A scorer and prompt code unchanged; Stage B behavior lives in EHRSQL-specific modules. Impossible records are never passed to SQLite.
+- Why: preserve frozen Stage A behavior while making EHRSQL abstention safety metrics explicit and testable.
+- Effect on results (if known): smoke answerable EX 100.0% (3/3), valid SQL 100.0%, abstention accuracy 100.0% (1/1), unsafe answers 0, unnecessary abstentions 0. This is an oracle smoke test, not a model result.
+- Files changed / result files: `data/ehrsql.py`, `harness/ehrsql_scorer.py`, `harness/ehrsql_output.py`, `harness/test_ehrsql.py`, `scripts/smoke_ehrsql.py`, `configs/ehrsql.yaml`, `results/2026-10-28_stageb1_ehrsql_mimic_iii_smoke.json`, `results/predictions/stageb1_ehrsql_mimic_iii_smoke.jsonl`.
+
+### 2026-10-28 | Stage B2 | Two unfrozen EHRSQL baseline prompts prepared
+- What happened: added two general EHRSQL prompt candidates and a dedicated baseline runner/comparison tool. Candidate A is concise; candidate B additionally tells the model to use only tables and columns in the supplied schema. Both require the exact `ABSTAIN` token for unsupported questions and prohibit medical advice.
+- Decision / change: no prompt is frozen yet; the two candidates will be compared only on aggregate metrics from the full official validation split.
+- Why: Stage B protocol permits at most two general prompt candidates and requires selection without per-example validation tuning.
+- Effect on results (if known): no Stage B model baseline result yet. The runner and all Stage A/Stage B unit tests pass (18 tests).
+- Files changed / result files: `harness/ehrsql_prompts.py`, `harness/run_ehrsql_baseline.py`, `harness/compare_ehrsql.py`, `harness/test_ehrsql_prompts.py`, `configs/ehrsql.yaml`; no new model result file.
+
 ---
 
 ## Open questions
