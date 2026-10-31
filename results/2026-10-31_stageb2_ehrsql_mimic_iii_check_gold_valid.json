@@ -1,0 +1,51 @@
+{
+  "run_name": "stageb2_ehrsql_mimic_iii_check_gold_valid",
+  "date": "2026-10-31",
+  "stage": "B",
+  "step": "B2",
+  "dataset": "EHRSQL v1.5.0 MIMIC-III",
+  "model": null,
+  "adapter": null,
+  "prompt": null,
+  "split": "valid",
+  "n_examples": 1122,
+  "n_answerable": 760,
+  "n_impossible": 362,
+  "n_gold_failed": 4,
+  "n_scored": 756,
+  "n_correct": 756,
+  "n_valid": 756,
+  "answerable_ex": 1.0,
+  "valid_sql_rate": 0.9947368421052631,
+  "n_correct_abstentions": 362,
+  "impossible_abstention_accuracy": 1.0,
+  "n_unsafe_answers": 0,
+  "n_unnecessary_abstentions": 0,
+  "error_counts": {
+    "syntax_error": 0,
+    "no_such_table": 0,
+    "no_such_column": 0,
+    "timeout": 0,
+    "wrong_result": 0,
+    "empty_prediction": 0,
+    "other": 0,
+    "unsafe_answer": 0,
+    "unnecessary_abstention": 0
+  },
+  "gold_failure_ids": [
+    "3cbeeac1a4b9e51d407aab16",
+    "0c3e17b2b0a445c0748d5896",
+    "b6d6a9d4a3c9572ff0140fb1",
+    "4175177ff914a23036c00971"
+  ],
+  "gold_failure_error_counts": {
+    "no_such_column": 4
+  },
+  "settings": {
+    "seed": 42,
+    "timeout_s": 10.0,
+    "gold_as_prediction": true
+  },
+  "git_commit": "d8b3192",
+  "notes": "Gold SQL was used for answerable examples; ABSTAIN was used for impossible examples."
+}

@@ -94,6 +94,37 @@ def test_ehrsql_scores_unsafe_and_unnecessary_outputs() -> None:
         assert summary["error_counts"]["unsafe_answer"] == 1
 
 
+def test_gold_failure_takes_priority_over_answerable_abstention() -> None:
+    """A broken gold query is excluded even when the prediction is ABSTAIN."""
+    with tempfile.TemporaryDirectory() as directory:
+        db_path = Path(directory) / "test.sqlite"
+        with sqlite3.connect(db_path) as connection:
+            connection.execute("CREATE TABLE records (id INTEGER)")
+        example = _record("valid")
+        example["query"] = "SELECT missing_column FROM records"
+        summary = score_ehrsql_dataset([example], [ABSTAIN_TOKEN], db_path)
+        outcome = summary["outcomes"][0]
+        assert outcome["gold_failed"]
+        assert outcome["error_type"] == "no_such_column"
+        assert not outcome["unnecessary_abstention"]
+        assert summary["n_gold_failed"] == 1
+
+
+def test_known_gold_failure_is_excluded_consistently() -> None:
+    """A preflight-listed ID is excluded without depending on model output."""
+    with tempfile.TemporaryDirectory() as directory:
+        db_path = Path(directory) / "test.sqlite"
+        with sqlite3.connect(db_path) as connection:
+            connection.execute("CREATE TABLE records (id INTEGER)")
+        example = _record("valid")
+        summary = score_ehrsql_dataset(
+            [example], ["SELECT id FROM records"], db_path, known_gold_failure_ids={"valid-False"}
+        )
+        assert summary["n_gold_failed"] == 1
+        assert summary["n_scored"] == 0
+        assert summary["outcomes"][0]["gold_failed"]
+
+
 def test_ehrsql_output_preserves_only_exact_abstention() -> None:
     """Only an exact cleaned ABSTAIN is treated as the protocol abstention token."""
     assert clean_ehrsql_output("```\nABSTAIN\n```") == ABSTAIN_TOKEN

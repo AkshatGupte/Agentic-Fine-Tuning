@@ -15,5 +15,14 @@ generation:
   max_new_tokens: 256
   greedy: true
 
+evaluation:
+  # Confirmed by the Stage B gold-only validation preflight on the supplied
+  # EHRSQL MIMIC-III SQLite database. Exclude identically from every baseline.
+  gold_failure_ids:
+    - 3cbeeac1a4b9e51d407aab16
+    - 0c3e17b2b0a445c0748d5896
+    - b6d6a9d4a3c9572ff0140fb1
+    - 4175177ff914a23036c00971
+
 sql:
   timeout_seconds: 10

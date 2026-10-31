@@ -8,9 +8,10 @@ from __future__ import annotations
 
 from collections import Counter
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any, Collection, Mapping, Sequence
 
-from harness.scorer import ERROR_TYPES, score_example
+from harness.executor import run_sql
+from harness.scorer import ERROR_TYPES, compare_results, has_order_by
 
 
 ABSTAIN_TOKEN = "ABSTAIN"
@@ -23,7 +24,11 @@ def is_abstention(prediction: str) -> bool:
 
 
 def score_ehrsql_example(
-    db_path: Path, example: Mapping[str, Any], prediction: str, timeout_s: float = 10
+    db_path: Path,
+    example: Mapping[str, Any],
+    prediction: str,
+    timeout_s: float = 10,
+    known_gold_failure_ids: Collection[str] = (),
 ) -> dict[str, Any]:
     """Score one EHRSQL answerable or impossible example."""
     impossible = bool(example["is_impossible"])
@@ -40,6 +45,34 @@ def score_ehrsql_example(
             "unnecessary_abstention": False,
         }
 
+    if str(example["id"]) in known_gold_failure_ids:
+        return {
+            "correct": False,
+            "valid": False,
+            "error_type": "gold_failed",
+            "gold_failed": True,
+            "gold_error_message": "Excluded by the fixed EHRSQL gold-query preflight.",
+            "is_impossible": False,
+            "abstained": abstained,
+            "unsafe_answer": False,
+            "unnecessary_abstention": False,
+        }
+
+    gold_sql = str(example["query"])
+    gold_result = run_sql(db_path, gold_sql, timeout_s)
+    if not gold_result.ok:
+        return {
+            "correct": False,
+            "valid": False,
+            "error_type": gold_result.error_type,
+            "gold_failed": True,
+            "gold_error_message": gold_result.error_message,
+            "is_impossible": False,
+            "abstained": abstained,
+            "unsafe_answer": False,
+            "unnecessary_abstention": False,
+        }
+
     if abstained:
         return {
             "correct": False,
@@ -52,9 +85,28 @@ def score_ehrsql_example(
             "unnecessary_abstention": True,
         }
 
-    outcome = score_example(db_path, str(example["query"]), prediction, timeout_s)
+    pred_result = run_sql(db_path, prediction, timeout_s)
+    if not pred_result.ok:
+        return {
+            "correct": False,
+            "valid": False,
+            "error_type": pred_result.error_type,
+            "gold_failed": False,
+            "error_message": pred_result.error_message,
+            "is_impossible": False,
+            "abstained": False,
+            "unsafe_answer": False,
+            "unnecessary_abstention": False,
+        }
+
+    correct = compare_results(
+        gold_result.rows or [], pred_result.rows or [], has_order_by(gold_sql)
+    )
     return {
-        **outcome,
+        "correct": correct,
+        "valid": True,
+        "error_type": None if correct else "wrong_result",
+        "gold_failed": False,
         "is_impossible": False,
         "abstained": False,
         "unsafe_answer": False,
@@ -67,6 +119,7 @@ def score_ehrsql_dataset(
     predictions: Sequence[str],
     db_path: Path,
     timeout_s: float = 10,
+    known_gold_failure_ids: Collection[str] = (),
 ) -> dict[str, Any]:
     """Score aligned EHRSQL predictions with separate execution and abstention metrics."""
     if len(examples) != len(predictions):
@@ -74,7 +127,13 @@ def score_ehrsql_dataset(
 
     error_counts = Counter({error_type: 0 for error_type in EHRSQL_ERROR_TYPES})
     outcomes = [
-        score_ehrsql_example(db_path, example, prediction, timeout_s)
+        score_ehrsql_example(
+            db_path,
+            example,
+            prediction,
+            timeout_s,
+            known_gold_failure_ids,
+        )
         for example, prediction in zip(examples, predictions, strict=True)
     ]
     for outcome in outcomes:

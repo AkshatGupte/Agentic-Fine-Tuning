@@ -110,6 +110,7 @@ def main() -> None:
     results_dir = args.results_dir or Path(config["paths"]["results_dir"])
     timeout_s = float(config["sql"]["timeout_seconds"])
     generation = config["generation"]
+    gold_failure_ids = set(config["evaluation"]["gold_failure_ids"])
     set_seed(int(config["seed"]))
 
     examples = load_ehrsql_split(data_root, args.split)
@@ -135,7 +136,13 @@ def main() -> None:
         max_new_tokens=int(generation["max_new_tokens"]),
     )
     predictions = [clean_ehrsql_output(text) for text in raw_predictions]
-    summary = score_ehrsql_dataset(examples, predictions, database_path(data_root), timeout_s)
+    summary = score_ehrsql_dataset(
+        examples,
+        predictions,
+        database_path(data_root),
+        timeout_s,
+        known_gold_failure_ids=gold_failure_ids,
+    )
 
     short_model = model_name.rsplit("/", maxsplit=1)[-1].lower().replace("-instruct", "")
     run_name = f"stageb2_ehrsql_mimic_iii_prompt{args.prompt}_{short_model}_{args.split}"
@@ -152,6 +159,7 @@ def main() -> None:
         "adapter": None,
         "prompt": args.prompt,
         "split": args.split,
+        "gold_failure_ids": sorted(gold_failure_ids),
         **{key: value for key, value in summary.items() if key != "outcomes"},
         "settings": {
             "seed": config["seed"],
@@ -160,9 +168,14 @@ def main() -> None:
             "batch_size": args.batch_size,
             "load_in_4bit": args.load_in_4bit,
             "timeout_s": timeout_s,
+            "fixed_gold_failure_count": len(gold_failure_ids),
         },
         "git_commit": git_commit(),
-        "notes": "Smoke run" if args.smoke else "",
+        "notes": (
+            "Smoke run; fixed gold failures excluded."
+            if args.smoke
+            else "Fixed EHRSQL gold-query preflight failures excluded from EX."
+        ),
     }
     results_dir.mkdir(parents=True, exist_ok=True)
     result_path = results_dir / f"{today}_{run_name}.json"

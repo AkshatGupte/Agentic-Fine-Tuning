@@ -104,6 +104,13 @@ Keep entries short. Newest entry at the bottom.
 - Effect on results (if known): no model result changed. All 19 unit tests and the local oracle smoke test passed after the change.
 - Files changed / result files: `data/ehrsql.py`, `harness/test_ehrsql.py`, `configs/ehrsql.yaml`, `docs/LOG.md`, `results/2026-10-28_stageb1_ehrsql_mimic_iii_smoke.json`.
 
+### 2026-10-31 | Stage B2 | Fixed EHRSQL gold-query accounting
+- What happened: verification of the first Prompt A and Prompt B validation artifacts found prompt-dependent gold-failure counts. The scorer had classified answerable `ABSTAIN` outputs before running their gold SQL, so broken gold queries could be hidden by a model abstention.
+- Decision / change: Stage B now executes gold SQL before handling an answerable prediction, and four validation records are excluded identically from every baseline using the saved gold-only preflight IDs in `configs/ehrsql.yaml`.
+- Why: gold failures must depend only on the fixed database and gold SQL, never on a model output. The supplied MIMIC-III SQLite database has four gold queries with missing columns: `systolic_bp_lower`, `temperature_lower` (two queries), and `sao2_lower`.
+- Effect on results (if known): the valid split has 760 answerable records, 4 fixed gold failures and 756 EX-scored records. The earlier Prompt A/B artifacts remain internally consistent but are invalid for prompt selection and must be retained only as debugging artifacts. The local gold preflight achieved oracle EX 100.0% (756/756); this is not a model result.
+- Files changed / result files: `harness/ehrsql_scorer.py`, `harness/check_ehrsql_gold.py`, `harness/run_ehrsql_baseline.py`, `harness/test_ehrsql.py`, `configs/ehrsql.yaml`, `docs/STAGE_B_PROTOCOL.md`, `docs/LOG.md`, `results/2026-10-31_stageb2_ehrsql_mimic_iii_check_gold_valid.json`, `results/predictions/stageb2_ehrsql_mimic_iii_check_gold_valid.jsonl`.
+
 ---
 
 ## Open questions
