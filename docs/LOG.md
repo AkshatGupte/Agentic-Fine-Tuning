@@ -111,6 +111,13 @@ Keep entries short. Newest entry at the bottom.
 - Effect on results (if known): the valid split has 760 answerable records, 4 fixed gold failures and 756 EX-scored records. The earlier Prompt A/B artifacts remain internally consistent but are invalid for prompt selection and must be retained only as debugging artifacts. The local gold preflight achieved oracle EX 100.0% (756/756); this is not a model result.
 - Files changed / result files: `harness/ehrsql_scorer.py`, `harness/check_ehrsql_gold.py`, `harness/run_ehrsql_baseline.py`, `harness/test_ehrsql.py`, `configs/ehrsql.yaml`, `docs/STAGE_B_PROTOCOL.md`, `docs/LOG.md`, `results/2026-10-31_stageb2_ehrsql_mimic_iii_check_gold_valid.json`, `results/predictions/stageb2_ehrsql_mimic_iii_check_gold_valid.jsonl`.
 
+### 2026-11-05 | Stage B2 | Prompt B frozen after corrected EHRSQL validation comparison
+- What happened: verified corrected, full-validation baseline artifacts for Prompt A and Prompt B, each with 1,122 predictions. Both use the same four fixed gold-query exclusions, leaving 756 answerable examples for EX.
+- Decision / change: froze Prompt B for the Stage B base-model test baseline, SFT construction, and all adapter evaluations.
+- Why: Prompt B slightly improved answerable EX (70/756, 9.3%, versus 69/756, 9.1%) and substantially improved impossible-question abstention accuracy (222/362, 61.3%, versus 94/362, 26.0%). It also produced fewer unsafe answers (140 versus 268). Prompt A had a slightly higher valid-SQL rate (167/760, 22.0%, versus 159/760, 20.9%), but that did not outweigh Prompt B's safety advantage.
+- Effect on results (if known): the prompt choice was based only on aggregate validation metrics; no individual validation records were used to tune either prompt. The untouched EHRSQL test split has not yet been run.
+- Files changed / result files: `docs/STAGE_B_PROTOCOL.md`, `docs/STAGE_B_TASKS.md`, `docs/LOG.md`, `results/2026-10-31_stageb2_ehrsql_mimic_iii_promptA_qwen2.5-coder-1.5b_valid.json`, `results/2026-10-31_stageb2_ehrsql_mimic_iii_promptB_qwen2.5-coder-1.5b_valid.json`, and their prediction JSONL files.
+
 ---
 
 ## Open questions
@@ -132,3 +139,5 @@ Fill this in as runs finish. Use `correct/total` next to the percentage.
 | 2026-10-23 | step4_adapter_qwen2.5-coder-1.5b | Qwen/Qwen2.5-Coder-1.5B-Instruct | B | QLoRA adapter | 59.7% (179/300) | 85.0% | 2963 training examples retained at 2048 tokens |
 | 2026-10-24 | step5_promptB_qwen2.5-coder-7b | Qwen/Qwen2.5-Coder-7B-Instruct | B | — | 72.6% (217/299) | 95.3% | One gold query timed out and was excluded |
 | 2026-10-24 | step5_adapter_qwen2.5-coder-7b | Qwen/Qwen2.5-Coder-7B-Instruct | B | QLoRA adapter | 72.7% (218/300) | 94.0% | 2527 training examples retained at 1024 tokens; 7B fit on Kaggle |
+| 2026-10-31 | stageb2_ehrsql_mimic_iii_promptA_qwen2.5-coder-1.5b_valid | Qwen/Qwen2.5-Coder-1.5B-Instruct | A | — | 9.1% (69/756) | 22.0% (167/760) | Corrected EHRSQL validation run; abstention 26.0% (94/362), unsafe answers 268 |
+| 2026-10-31 | stageb2_ehrsql_mimic_iii_promptB_qwen2.5-coder-1.5b_valid | Qwen/Qwen2.5-Coder-1.5B-Instruct | B | — | 9.3% (70/756) | 20.9% (159/760) | Corrected EHRSQL validation run; frozen prompt; abstention 61.3% (222/362), unsafe answers 140 |

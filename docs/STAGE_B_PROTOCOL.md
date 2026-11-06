@@ -109,8 +109,12 @@ accuracy into an unlabelled single number.
   hand-written answers.
 - Compare prompt candidates only on the full validation split using aggregate
   metrics.
-- Freeze one prompt after validation comparison and use it unchanged for SFT
-  construction and all adapter/test evaluations.
+- Frozen prompt: **B**. On the corrected full validation comparison it achieved
+  answerable EX of 70/756 (9.3%), versus 69/756 (9.1%) for Prompt A, while
+  correctly abstaining on 222/362 (61.3%) impossible questions versus 94/362
+  (26.0%) and producing 140 unsafe answers versus 268. Use Prompt B unchanged
+  for the base-model test baseline, SFT construction, and all adapter/test
+  evaluations.
 - Do not inspect individual validation errors to iteratively tune the prompt.
 
 ## 9. Training protocol

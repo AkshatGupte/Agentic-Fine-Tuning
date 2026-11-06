@@ -46,6 +46,6 @@
     "timeout_s": 10.0,
     "gold_as_prediction": true
   },
-  "git_commit": "d8b3192",
+  "git_commit": "738febc",
   "notes": "Gold SQL was used for answerable examples; ABSTAIN was used for impossible examples."
 }

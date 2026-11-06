@@ -49,9 +49,9 @@ result is saved under `results/`.
 Goal: select one EHRSQL prompt from aggregate validation results.
 
 - [x] Implement up to two protocol-compliant prompt candidates.
-- [ ] Run each base-model candidate on the full validation split.
-- [ ] Save per-example predictions and all Stage B metrics.
-- [ ] Compare aggregate results only; freeze one prompt and log the reason.
+- [x] Run each base-model candidate on the full validation split.
+- [x] Save per-example predictions and all Stage B metrics.
+- [x] Compare aggregate results only; freeze one prompt and log the reason.
 - [ ] Run the frozen-prompt base-model baseline once on the untouched test
   split.
 

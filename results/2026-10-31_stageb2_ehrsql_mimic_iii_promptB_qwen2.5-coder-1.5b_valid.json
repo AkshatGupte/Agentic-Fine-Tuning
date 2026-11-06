@@ -1,0 +1,52 @@
+{
+  "run_name": "stageb2_ehrsql_mimic_iii_promptB_qwen2.5-coder-1.5b_valid",
+  "date": "2026-10-31",
+  "stage": "B",
+  "step": "B2",
+  "dataset": "EHRSQL v1.5.0 MIMIC-III",
+  "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+  "adapter": null,
+  "prompt": "B",
+  "split": "valid",
+  "gold_failure_ids": [
+    "0c3e17b2b0a445c0748d5896",
+    "3cbeeac1a4b9e51d407aab16",
+    "4175177ff914a23036c00971",
+    "b6d6a9d4a3c9572ff0140fb1"
+  ],
+  "n_examples": 1122,
+  "n_answerable": 760,
+  "n_impossible": 362,
+  "n_gold_failed": 4,
+  "n_scored": 756,
+  "n_correct": 70,
+  "n_valid": 159,
+  "answerable_ex": 0.09259259259259259,
+  "valid_sql_rate": 0.20921052631578949,
+  "n_correct_abstentions": 222,
+  "impossible_abstention_accuracy": 0.6132596685082873,
+  "n_unsafe_answers": 140,
+  "n_unnecessary_abstentions": 61,
+  "error_counts": {
+    "syntax_error": 139,
+    "no_such_table": 15,
+    "no_such_column": 380,
+    "timeout": 0,
+    "wrong_result": 89,
+    "empty_prediction": 0,
+    "other": 2,
+    "unsafe_answer": 140,
+    "unnecessary_abstention": 61
+  },
+  "settings": {
+    "seed": 42,
+    "max_new_tokens": 256,
+    "greedy": true,
+    "batch_size": 1,
+    "load_in_4bit": true,
+    "timeout_s": 10.0,
+    "fixed_gold_failure_count": 4
+  },
+  "git_commit": "738febc",
+  "notes": "Fixed EHRSQL gold-query preflight failures excluded from EX."
+}
