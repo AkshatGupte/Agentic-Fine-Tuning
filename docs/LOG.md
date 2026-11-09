@@ -118,6 +118,13 @@ Keep entries short. Newest entry at the bottom.
 - Effect on results (if known): the prompt choice was based only on aggregate validation metrics; no individual validation records were used to tune either prompt. The untouched EHRSQL test split has not yet been run.
 - Files changed / result files: `docs/STAGE_B_PROTOCOL.md`, `docs/STAGE_B_TASKS.md`, `docs/LOG.md`, `results/2026-10-31_stageb2_ehrsql_mimic_iii_promptA_qwen2.5-coder-1.5b_valid.json`, `results/2026-10-31_stageb2_ehrsql_mimic_iii_promptB_qwen2.5-coder-1.5b_valid.json`, and their prediction JSONL files.
 
+### 2026-11-09 | Stage B2 | Frozen Prompt-B test baseline completed
+- What happened: ran the frozen `Qwen/Qwen2.5-Coder-1.5B-Instruct` Prompt-B baseline once on the official untouched EHRSQL MIMIC-III test split. The downloaded result JSON and 1,786-row prediction JSONL were verified locally against each other.
+- Decision / change: completed Stage B2. The test preflight failures are now configured separately from validation failures: both splits have four, but they are different record IDs. Future test adapter evaluations must use the test list, leaving the same 1,194-example EX denominator.
+- Why: the summary metadata from the completed test run carried the validation exclusion IDs even though its runtime scorer correctly found four different test gold failures. Split-specific lists make the fixed denominator explicit and reproducible for the base-versus-adapter test comparison.
+- Effect on results (if known): test answerable EX 9.0% (107/1,194); valid SQL 21.0% (251/1,198); abstention accuracy 39.5% (232/588); unsafe answers 356; unnecessary abstentions 119; gold failures 4. No adapter was trained or evaluated in this step.
+- Files changed / result files: `configs/ehrsql.yaml`, `harness/run_ehrsql_baseline.py`, `harness/test_ehrsql.py`, `docs/STAGE_B_PROTOCOL.md`, `docs/STAGE_B_TASKS.md`, `docs/LOG.md`, `results/2026-11-08_stageb2_ehrsql_mimic_iii_promptB_qwen2.5-coder-1.5b_test.json`, and its prediction JSONL.
+
 ---
 
 ## Open questions
@@ -141,3 +148,4 @@ Fill this in as runs finish. Use `correct/total` next to the percentage.
 | 2026-10-24 | step5_adapter_qwen2.5-coder-7b | Qwen/Qwen2.5-Coder-7B-Instruct | B | QLoRA adapter | 72.7% (218/300) | 94.0% | 2527 training examples retained at 1024 tokens; 7B fit on Kaggle |
 | 2026-10-31 | stageb2_ehrsql_mimic_iii_promptA_qwen2.5-coder-1.5b_valid | Qwen/Qwen2.5-Coder-1.5B-Instruct | A | — | 9.1% (69/756) | 22.0% (167/760) | Corrected EHRSQL validation run; abstention 26.0% (94/362), unsafe answers 268 |
 | 2026-10-31 | stageb2_ehrsql_mimic_iii_promptB_qwen2.5-coder-1.5b_valid | Qwen/Qwen2.5-Coder-1.5B-Instruct | B | — | 9.3% (70/756) | 20.9% (159/760) | Corrected EHRSQL validation run; frozen prompt; abstention 61.3% (222/362), unsafe answers 140 |
+| 2026-11-08 | stageb2_ehrsql_mimic_iii_promptB_qwen2.5-coder-1.5b_test | Qwen/Qwen2.5-Coder-1.5B-Instruct | B | — | 9.0% (107/1,194) | 21.0% (251/1,198) | Untouched test baseline; abstention 39.5% (232/588), unsafe answers 356; 4 fixed test gold failures |

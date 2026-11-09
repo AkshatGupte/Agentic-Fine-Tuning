@@ -64,12 +64,12 @@ bad input and stop the run.
 If a gold query fails or times out, mark it `gold_failed`, exclude it from
 execution accuracy, and report it separately.
 
-The EHRSQL MIMIC-III validation preflight identified four gold queries that
-cannot run against the supplied SQLite database because their referenced
-columns do not exist. Their IDs are fixed in `configs/ehrsql.yaml` and must be
-excluded identically from every validation baseline, leaving 756 answerable
-examples for EX. Run `harness/check_ehrsql_gold.py` before a new environment or
-dataset version is used.
+The EHRSQL MIMIC-III gold preflights identified four gold queries with missing
+columns in each evaluation split. Their split-specific IDs are fixed in
+`configs/ehrsql.yaml` and must be excluded identically from every comparable
+run: validation has 756 EX-scored answerable examples (760 minus 4), and test
+has 1,194 (1,198 minus 4). Run `harness/check_ehrsql_gold.py` before a new
+environment or dataset version is used.
 
 ## 6. Answerable and impossible questions
 

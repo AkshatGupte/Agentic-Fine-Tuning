@@ -60,6 +60,14 @@ def load_config(path: Path) -> dict[str, Any]:
         return yaml.safe_load(file)
 
 
+def gold_failure_ids_for_split(config: dict[str, Any], split: str) -> set[str]:
+    """Return the fixed gold-query exclusions for one official split."""
+    try:
+        return set(config["evaluation"]["gold_failure_ids_by_split"][split])
+    except KeyError as error:
+        raise ValueError(f"No fixed gold-failure IDs configured for split: {split}") from error
+
+
 def git_commit() -> str | None:
     """Return the short Git revision if available."""
     try:
@@ -110,7 +118,7 @@ def main() -> None:
     results_dir = args.results_dir or Path(config["paths"]["results_dir"])
     timeout_s = float(config["sql"]["timeout_seconds"])
     generation = config["generation"]
-    gold_failure_ids = set(config["evaluation"]["gold_failure_ids"])
+    gold_failure_ids = gold_failure_ids_for_split(config, args.split)
     set_seed(int(config["seed"]))
 
     examples = load_ehrsql_split(data_root, args.split)

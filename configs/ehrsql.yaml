@@ -16,13 +16,19 @@ generation:
   greedy: true
 
 evaluation:
-  # Confirmed by the Stage B gold-only validation preflight on the supplied
-  # EHRSQL MIMIC-III SQLite database. Exclude identically from every baseline.
-  gold_failure_ids:
-    - 3cbeeac1a4b9e51d407aab16
-    - 0c3e17b2b0a445c0748d5896
-    - b6d6a9d4a3c9572ff0140fb1
-    - 4175177ff914a23036c00971
+  # Confirmed by gold-only preflights on the supplied EHRSQL MIMIC-III SQLite
+  # database. Use the list for the matching split in every comparable run.
+  gold_failure_ids_by_split:
+    valid:
+      - 3cbeeac1a4b9e51d407aab16
+      - 0c3e17b2b0a445c0748d5896
+      - b6d6a9d4a3c9572ff0140fb1
+      - 4175177ff914a23036c00971
+    test:
+      - a97f07c814dfdf83b63730f1
+      - d7c6d7eaae7ee8fd1cefb2c3
+      - 12dd9f46f25827a0085d4f94
+      - 005ae80957ccc51ca1f3e0bd
 
 sql:
   timeout_seconds: 10

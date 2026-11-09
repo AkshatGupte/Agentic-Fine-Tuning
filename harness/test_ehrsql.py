@@ -16,6 +16,7 @@ import pytest
 from data.ehrsql import load_ehrsql_split
 from harness.ehrsql_output import clean_ehrsql_output
 from harness.ehrsql_scorer import ABSTAIN_TOKEN, score_ehrsql_dataset
+from harness.run_ehrsql_baseline import gold_failure_ids_for_split
 
 
 def _write_split(root: Path, split: str, records: list[dict[str, object]]) -> None:
@@ -123,6 +124,17 @@ def test_known_gold_failure_is_excluded_consistently() -> None:
         assert summary["n_gold_failed"] == 1
         assert summary["n_scored"] == 0
         assert summary["outcomes"][0]["gold_failed"]
+
+
+def test_gold_failure_ids_are_selected_by_split() -> None:
+    """Validation and test use their own fixed gold-query exclusions."""
+    config = {
+        "evaluation": {
+            "gold_failure_ids_by_split": {"valid": ["valid-id"], "test": ["test-id"]}
+        }
+    }
+    assert gold_failure_ids_for_split(config, "valid") == {"valid-id"}
+    assert gold_failure_ids_for_split(config, "test") == {"test-id"}
 
 
 def test_ehrsql_output_preserves_only_exact_abstention() -> None:
