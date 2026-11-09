@@ -125,6 +125,13 @@ Keep entries short. Newest entry at the bottom.
 - Effect on results (if known): test answerable EX 9.0% (107/1,194); valid SQL 21.0% (251/1,198); abstention accuracy 39.5% (232/588); unsafe answers 356; unnecessary abstentions 119; gold failures 4. No adapter was trained or evaluated in this step.
 - Files changed / result files: `configs/ehrsql.yaml`, `harness/run_ehrsql_baseline.py`, `harness/test_ehrsql.py`, `docs/STAGE_B_PROTOCOL.md`, `docs/STAGE_B_TASKS.md`, `docs/LOG.md`, `results/2026-11-08_stageb2_ehrsql_mimic_iii_promptB_qwen2.5-coder-1.5b_test.json`, and its prediction JSONL.
 
+### 2026-11-09 | Stage B3 | EHRSQL SFT preparation utility added
+- What happened: added a configurable EHRSQL SFT builder for answerable official training records only. It uses frozen Prompt B, the SQLite-derived MIMIC-III schema, the gold SQL completion, and the tokenizer end-of-text token. It writes a JSONL corpus and a separate token-length/drop report.
+- Decision / change: use the Stage A starting QLoRA sequence limit of 2,048 tokens for the initial EHRSQL preparation report. The generated SFT JSONL remains ignored because it is derived from the benchmark data; the compact report is saved under `results/` after a real Kaggle run.
+- Why: token-length filtering must be measured before training so any dropped records are explicit and reproducible. No model, tokenizer, or dataset was downloaded locally for this code-only change.
+- Effect on results (if known): no training or SFT preparation run has occurred yet; no token counts or dropped-example counts are claimed.
+- Files changed / result files: `configs/train_ehrsql_qlora.yaml`, `train/make_ehrsql_sft_data.py`, `train/test_make_ehrsql_sft_data.py`, `.gitignore`, `docs/LOG.md`; no new result file.
+
 ---
 
 ## Open questions

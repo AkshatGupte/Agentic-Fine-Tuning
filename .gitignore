@@ -19,6 +19,7 @@ hf_token*
 
 # ---------- Raw datasets (large, and not ours to redistribute) ----------
 data/raw/
+data/sft/
 
 # ---------- Model files, adapters, checkpoints (large) ----------
 *.safetensors
