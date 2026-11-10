@@ -132,6 +132,13 @@ Keep entries short. Newest entry at the bottom.
 - Effect on results (if known): no training or SFT preparation run has occurred yet; no token counts or dropped-example counts are claimed.
 - Files changed / result files: `configs/train_ehrsql_qlora.yaml`, `train/make_ehrsql_sft_data.py`, `train/test_make_ehrsql_sft_data.py`, `.gitignore`, `docs/LOG.md`; no new result file.
 
+### 2026-11-10 | Stage B3 | EHRSQL Prompt-B SFT data prepared
+- What happened: ran the EHRSQL SFT preparation utility on Kaggle's official MIMIC-III training split, then verified the downloaded JSONL and report locally. The JSONL has 8,959 unique records, each with a frozen Prompt-B prompt and non-empty gold SQL completion.
+- Decision / change: retain 8,959 of 9,318 answerable training records at the frozen 2,048-token sequence limit; drop 359 records exceeding that limit. The generated JSONL stays local/ignored under `data/sft/`; the compact preparation report is retained under `results/`.
+- Why: records longer than the configured sequence limit cannot be trained without truncating the prompt or completion. Keeping the recorded fixed subset makes the later QLoRA run reproducible.
+- Effect on results (if known): token lengths were min 1,721, median 1,828, mean 1,860.9, and max 2,271. No model training or adapter evaluation has occurred.
+- Files changed / result files: `data/sft/ehrsql_mimic_iii_prompt_b.jsonl` (ignored derived data) and `results/2026-11-10_stageb3_ehrsql_mimic_iii_sft_prep.json`.
+
 ---
 
 ## Open questions
@@ -156,3 +163,4 @@ Fill this in as runs finish. Use `correct/total` next to the percentage.
 | 2026-10-31 | stageb2_ehrsql_mimic_iii_promptA_qwen2.5-coder-1.5b_valid | Qwen/Qwen2.5-Coder-1.5B-Instruct | A | — | 9.1% (69/756) | 22.0% (167/760) | Corrected EHRSQL validation run; abstention 26.0% (94/362), unsafe answers 268 |
 | 2026-10-31 | stageb2_ehrsql_mimic_iii_promptB_qwen2.5-coder-1.5b_valid | Qwen/Qwen2.5-Coder-1.5B-Instruct | B | — | 9.3% (70/756) | 20.9% (159/760) | Corrected EHRSQL validation run; frozen prompt; abstention 61.3% (222/362), unsafe answers 140 |
 | 2026-11-08 | stageb2_ehrsql_mimic_iii_promptB_qwen2.5-coder-1.5b_test | Qwen/Qwen2.5-Coder-1.5B-Instruct | B | — | 9.0% (107/1,194) | 21.0% (251/1,198) | Untouched test baseline; abstention 39.5% (232/588), unsafe answers 356; 4 fixed test gold failures |
+| 2026-11-10 | stageb3_ehrsql_mimic_iii_sft_prep | Qwen/Qwen2.5-Coder-1.5B-Instruct | B | — | — | — | 8,959/9,318 train records retained at 2,048 tokens; 359 dropped; no training |

@@ -65,8 +65,8 @@ untuned baseline result exists on test.
 Goal: fine-tune the development model on the EHRSQL training split and compare
 it fairly with the frozen-prompt baseline.
 
-- [ ] Build SFT data from answerable training examples using the frozen prompt.
-- [ ] Report token lengths and dropped examples before training.
+- [x] Build SFT data from answerable training examples using the frozen prompt.
+- [x] Report token lengths and dropped examples before training.
 - [ ] Run one QLoRA training job with configured, recorded settings.
 - [ ] Save the adapter and `adapter_info.json` privately on Kaggle.
 - [ ] Evaluate the adapter once on the untouched test split.
