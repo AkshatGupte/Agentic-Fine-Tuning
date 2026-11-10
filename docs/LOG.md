@@ -139,6 +139,13 @@ Keep entries short. Newest entry at the bottom.
 - Effect on results (if known): token lengths were min 1,721, median 1,828, mean 1,860.9, and max 2,271. No model training or adapter evaluation has occurred.
 - Files changed / result files: `data/sft/ehrsql_mimic_iii_prompt_b.jsonl` (ignored derived data) and `results/2026-11-10_stageb3_ehrsql_mimic_iii_sft_prep.json`.
 
+### 2026-11-10 | Stage B3 | EHRSQL QLoRA training runner added
+- What happened: added a Stage B-specific QLoRA trainer that validates the prepared SFT JSONL, applies loss only to SQL completion tokens, uses the configured QLoRA settings, and writes adapter metadata with the data count, prompt, model, seed, settings, and Git commit.
+- Decision / change: preserve the existing Stage A trainer unchanged; use the dedicated EHRSQL runner for the Stage B adapter so its metadata and safety-relevant experiment context are unambiguous.
+- Why: the next run must be directly comparable with the frozen Prompt-B test baseline and must retain enough metadata to reproduce adapter evaluation.
+- Effect on results (if known): no QLoRA training has been run yet; no adapter or model metric is claimed.
+- Files changed / result files: `train/train_ehrsql_qlora.py`, `train/test_train_ehrsql_qlora.py`, `docs/LOG.md`; no new result file.
+
 ---
 
 ## Open questions
